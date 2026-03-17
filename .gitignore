@@ -44,6 +44,7 @@ cpm_modules
 qrc_*.cpp
 moc_*
 ui_*
+!.github/ISSUE_TEMPLATE/ui_bug.md
 *.moc
 *.prl
 *.qm
