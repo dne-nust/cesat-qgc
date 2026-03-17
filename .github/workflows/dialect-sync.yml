@@ -1,0 +1,27 @@
+name: Check CESAT Dialect Sync
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-dialect:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Check for upstream cesat.xml changes
+        run: |
+          cd mavlink/cesat_dialect
+          git fetch origin
+          if ! git diff --quiet HEAD origin/main -- cesat.xml; then
+            echo "WARNING: cesat.xml has diverged from cesat-px4autopilot upstream."
+            echo "Please update the submodule: git submodule update --remote mavlink/cesat_dialect"
+            exit 1
+          fi
+          echo "cesat.xml is in sync."
